@@ -1,0 +1,100 @@
+@page
+@model HelpModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Help</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background-color: #f8f9fa; color: #002244; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+        .navbar { background-color: #003366; border-bottom: 4px solid #cc0000; display: flex; padding: 0 20px; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; display: flex; width: 100%; }
+        .navbar li a { display: block; color: white; padding: 12px 25px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .navbar li a:hover, .navbar li a.active { background-color: #cc0000; color: white; }
+        .logout-item { margin-left: auto; }
+        .container { max-width: 860px; margin: 40px auto; padding: 0 20px; }
+        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2 { color: #003366; border-bottom: 2px solid #cc0000; padding-bottom: 8px; margin-bottom: 16px; font-size: 18px; }
+        h3 { color: #003366; margin: 18px 0 8px; font-size: 15px; }
+        p, li { color: #444; line-height: 1.7; font-size: 14px; }
+        ul { padding-left: 20px; }
+        .section { border-left: 4px solid #003366; padding-left: 16px; margin-bottom: 20px; }
+        .badge { display: inline-block; background: #003366; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-right: 6px; }
+    </style>
+</head>
+<body>
+<div class="header"><h1>Employee Wages Tracking Application (EWTA)</h1></div>
+<nav class="navbar">
+    <ul>
+        <li><a href="/Index">HOME</a></li>
+        <li><a href="/Index?category=Forms">FORMS</a></li>
+        <li><a href="/Index?category=Reports">REPORTS</a></li>
+        <li><a href="/About">ABOUT</a></li>
+        <li><a href="/Contact">CONTACT</a></li>
+        <li><a href="/Help" class="active">HELP</a></li>
+        <li class="logout-item"><a href="/Login">LOGOUT</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <div class="card">
+        <h2>User Guide — EWTA Help</h2>
+        <p>This guide explains how to use the Employee Wages Tracking Application. For support, contact the technical team at <strong>111 222 3333</strong> or <a href="mailto:mcoruh@gmail.com">mcoruh@gmail.com</a>.</p>
+    </div>
+
+    <div class="card">
+        <h2>Getting Started</h2>
+        <div class="section">
+            <h3>Login</h3>
+            <p>Enter your username and password on the Login page. Default accounts: <strong>Mustafa / 123</strong> or <strong>Admin / 3540</strong>. After login you will be directed to the Home page.</p>
+        </div>
+        <div class="section">
+            <h3>Navigation</h3>
+            <p>Use the top navigation bar to switch between sections: <span class="badge">HOME</span> <span class="badge">FORMS</span> <span class="badge">REPORTS</span>. Click <span class="badge">LOGOUT</span> to sign out.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Forms</h2>
+        <div class="section">
+            <h3>Employee Data Entry Form</h3>
+            <p>Add a new employee by filling in personal and work information. Required fields are marked with *. Click <strong>Save Employee</strong> to save.</p>
+        </div>
+        <div class="section">
+            <h3>Employee Data Update Form</h3>
+            <p>View the employee list, click <strong>Edit</strong> to modify a record or <strong>Delete</strong> to remove it. You can also set the left date and reason for resigned employees.</p>
+        </div>
+        <div class="section">
+            <h3>Employee Data Entry Wizard Form</h3>
+            <p>A 3-step form for adding employees. Step 1: Personal info. Step 2: Work info. Step 3: Contact info. Use <strong>Next</strong> and <strong>Back</strong> to navigate between steps.</p>
+        </div>
+        <div class="section">
+            <h3>Wage Data Entry Form</h3>
+            <p>Select an employee, enter the wage date, amount, commission and month. The total is calculated automatically.</p>
+        </div>
+        <div class="section">
+            <h3>Wage Data Update Form</h3>
+            <p>View all wage records. Click <strong>Edit</strong> to update or <strong>Delete</strong> to remove a record.</p>
+        </div>
+        <div class="section">
+            <h3>Department Entry & Update Form</h3>
+            <p>Add new departments or edit/delete existing ones from the same page.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Reports</h2>
+        <ul>
+            <li><strong>Employee List</strong> — Full list of employees with department filter.</li>
+            <li><strong>Employees by Dept</strong> — Employees grouped by department with counts.</li>
+            <li><strong>Wage Graph by Year</strong> — Bar chart showing total wages per year.</li>
+            <li><strong>Wage Graph by Employee</strong> — Bar chart comparing total wages per employee.</li>
+            <li><strong>Wages by Employee Report</strong> — Detailed wage history per employee with totals.</li>
+            <li><strong>Communication Report</strong> — Employee contact details with search.</li>
+            <li><strong>Employee Resign Report</strong> — List of employees who have left the company.</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

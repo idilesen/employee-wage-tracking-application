@@ -1,0 +1,108 @@
+@page
+@model DepartmentEntryModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Department</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        h2 { color: #003366; margin-bottom: 16px; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #333; }
+        input[type=text] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-save { background: #003366; color: white; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .btn-edit { background: #003366; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .btn-delete { background: #cc0000; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #003366; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+        td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover td { background: #f5f8ff; }
+        .msg { padding: 10px; border-radius: 4px; margin-bottom: 14px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>💼 Department Entry & Update</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    @if (!string.IsNullOrEmpty(Model.Message))
+    { <div class="msg @(Model.Success ? "success" : "error")">@Model.Message</div> }
+
+    <div class="card">
+        @if (Model.EditDept == null)
+        {
+            <h2>Add New Department</h2>
+            <form method="post" asp-page-handler="Add">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="form-group">
+                        <label>Department Name *</label>
+                        <input type="text" name="DeptName" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" name="DeptPhone" />
+                    </div>
+                </div>
+                <button type="submit" class="btn-save">💾 Add Department</button>
+            </form>
+        }
+        else
+        {
+            <h2>Edit Department</h2>
+            <form method="post" action="/DepartmentEntry?handler=Add">
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-group">
+            <label>Department Name *</label>
+            <input type="text" name="DeptName" required />
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="DeptPhone" />
+        </div>
+    </div>
+    <button type="submit" class="btn-save">💾 Add Department</button>
+</form>
+        }
+    </div>
+
+    <div class="card">
+        <h2>Departments</h2>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Action</th></tr></thead>
+            <tbody>
+                @foreach (var d in Model.Departments)
+                {
+                    <tr>
+                        <td>@d.DeptID</td>
+                        <td>@d.DeptName</td>
+                        <td>@d.DeptPhone</td>
+                        <td>
+                            <form method="get" style="display:inline">
+                                <input type="hidden" name="edit" value="@d.DeptID" />
+                                <button type="submit" class="btn-edit">Edit</button>
+                            </form>
+                            <form method="post" action="/DepartmentEntry?handler=Delete&id=@d.DeptID" style="display:inline" onsubmit="return confirm('Delete this department?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

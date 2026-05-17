@@ -1,0 +1,148 @@
+@page
+@model IndexModel
+@{
+    Layout = null;
+    var category = Request.Query["category"].ToString();
+    var isLoggedIn = HttpContext.Session.GetString("username") != null;
+
+    // Giriş yapılmamışsa Forms/Reports içeriğini gösterme
+    if ((category == "Forms" || category == "Reports") && !isLoggedIn)
+    {
+        category = ""; // İçeriği ana sayfaya düşür
+    }
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <title>EWTA - @(string.IsNullOrEmpty(category) ? "Ana Sayfa" : category)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; }
+        
+        /* Üst Header */
+        .header { background-color: #f8f9fa; color: #002244; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* Navigasyon Menüsü (Net Kırmızı Çizgili) */
+        .navbar { background-color: #003366; border-bottom: 4px solid #cc0000; display: flex; padding: 0 20px; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; display: flex; width: 100%; }
+        .navbar li a { display: block; color: white; padding: 12px 25px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .navbar li a:hover { background-color: #cc0000; color: white; }
+        .logout-item { margin-left: auto; }
+
+        /* İçerik Alanı */
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; text-align: center; }
+        
+        /* Dashboard Kartları (Forms ve Reports için) */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        .card { background: white; border-radius: 8px; border: 1px solid #ddd; padding: 25px; text-align: center; text-decoration: none; color: #333; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: #003366; }
+        .card .icon { font-size: 40px; margin-bottom: 15px; display: block; }
+        .card h3 { margin: 0; color: #003366; font-size: 14px; text-transform: uppercase; }
+
+        /* Ana Sayfa Görsel ve Metin Alanı */
+        .homepage-content { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .main-image { width: 100%; max-width: 800px; border-radius: 5px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .project-title { color: #003366; font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+        .project-subtitle { color: #555; font-size: 16px; margin-bottom: 30px; }
+        .welcome-text { font-style: italic; color: #333; font-size: 18px; border-top: 1px solid #eee; padding-top: 20px; }
+        .team-names { color: #cc0000; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Employee Wages Tracking Application (EWTA)</h1>
+    </div>
+
+    <nav class="navbar">
+    <ul>
+        <li><a href="/Index">HOME</a></li>
+        
+        @if (HttpContext.Session.GetString("username") != null)
+        {
+            <li><a href="/Index?category=Forms">FORMS</a></li>
+            <li><a href="/Index?category=Reports">REPORTS</a></li>
+        }
+        
+        <li><a href="/About">ABOUT</a></li>
+        <li><a href="/Contact">CONTACT</a></li>
+        <li><a href="/Help">HELP</a></li>
+        
+        @if (HttpContext.Session.GetString("username") != null)
+        {
+            <li class="logout-item"><a href="/Login?handler=Logout">LOGOUT</a></li>
+        }
+        else
+        {
+            <li class="logout-item"><a href="/Login">LOGIN</a></li>
+        }
+    </ul>
+</nav>
+
+    <div class="container">
+        @if (category == "Forms")
+        {
+            <h2 style="color:#003366">FORMS</h2>
+            <div class="grid">
+                <a class="card" href="/EmployeeEntry">
+                    <span class="icon">📝</span>
+                    <h3>Employee Data Entry Form</h3>
+                </a>
+                <a class="card" href="/EmployeeUpdate">
+                    <span class="icon">🔄</span>
+                    <h3>Employee Data Update Form</h3>
+                </a>
+                <a class="card" href="/WizardForm">
+                    <span class="icon">🪄</span>
+                    <h3>Employee Data Entry Wizard Form</h3>
+                </a>
+                <a class="card" href="/WageEntry">
+                    <span class="icon">💰</span>
+                    <h3>Wage Data Entry Form</h3>
+                </a>
+                <a class="card" href="/WageUpdate">
+                    <span class="icon">💸</span>
+                    <h3>Wage Data Update Form</h3>
+                </a>
+                <a class="card" href="/DepartmentEntry">
+                    <span class="icon">💼</span>
+                    <h3>Department Data Entry and Update Form</h3>
+                </a>
+            </div>
+        }
+        else if (category == "Reports")
+        {
+            <h2 style="color:#003366">REPORTS</h2>
+            <div class="grid">
+                <a class="card" href="/EmployeeList"><span class="icon">📋</span><h3>Employee List</h3></a>
+                <a class="card" href="/DeptReport"><span class="icon">🏢</span><h3>Employees by Dept</h3></a>
+                <a class="card" href="/WageGraphYear"><span class="icon">📅</span><h3>Wage Graph by Year</h3></a>
+                <a class="card" href="/WageGraphEmp"><span class="icon">📈</span><h3>Wage Graph by Employee</h3></a>
+                <a class="card" href="/WagesByEmp"><span class="icon">💰</span><h3>Wages by Employee Report</h3></a>
+                <a class="card" href="/Communication"><span class="icon">📞</span><h3>Communication Report</h3></a>
+                <a class="card" href="/ResignReport"><span class="icon">🚪</span><h3>Employee Resign Report</h3></a>
+            </div>
+        }
+        else
+        {
+            <div class="homepage-content">
+                <img src="/images/global-workforce.png" alt="Global Workforce" class="main-image">
+                
+                <div class="project-title">
+                    Employee Wages Tracking Application (EWTA)
+                </div>
+                <div class="project-subtitle">
+                    Web based ASP.NET Project
+                </div>
+                
+                <div class="welcome-text">
+                    Welcome to our project. <br> 
+                    Made it by, <span class="team-names">İdil Esen, Talya Kuvvet, Melis Can</span>
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>

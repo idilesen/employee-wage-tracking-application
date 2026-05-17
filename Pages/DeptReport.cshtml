@@ -1,0 +1,71 @@
+@page
+@model DeptReportModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Employees by Department</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .dept-section { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; }
+        .dept-header { background: #003366; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .dept-header h3 { margin: 0; font-size: 15px; }
+        .dept-header span { background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f0f4ff; color: #003366; padding: 9px 12px; text-align: left; font-size: 12px; border-bottom: 2px solid #003366; }
+        td { padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover td { background: #f5f8ff; }
+        .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; }
+        .active { background: #d4edda; color: #155724; }
+        .inactive { background: #f8d7da; color: #721c24; }
+        .summary { background: white; padding: 16px 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; display: flex; gap: 30px; }
+        .summary-item { text-align: center; }
+        .summary-item .num { font-size: 28px; font-weight: bold; color: #003366; }
+        .summary-item .lbl { font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>🏢 Employees by Department</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    <div class="summary">
+        <div class="summary-item"><div class="num">@Model.TotalEmployees</div><div class="lbl">Total Employees</div></div>
+        <div class="summary-item"><div class="num">@Model.ActiveEmployees</div><div class="lbl">Active</div></div>
+        <div class="summary-item"><div class="num">@Model.DepartmentGroups.Count</div><div class="lbl">Departments</div></div>
+    </div>
+
+    @foreach (var group in Model.DepartmentGroups)
+    {
+        <div class="dept-section">
+            <div class="dept-header">
+                <h3>@group.Key</h3>
+                <span>@group.Value.Count employee(s)</span>
+            </div>
+            <table>
+                <thead><tr><th>ID</th><th>Full Name</th><th>Title</th><th>Email</th><th>Phone</th><th>Start Date</th><th>Status</th></tr></thead>
+                <tbody>
+                    @foreach (var e in group.Value)
+                    {
+                        <tr>
+                            <td>@e.EmplID</td>
+                            <td>@e.FullName</td>
+                            <td>@e.Title</td>
+                            <td>@e.Email</td>
+                            <td>@e.Phone</td>
+                            <td>@e.StartDate</td>
+                            <td><span class="badge @(e.IsActive ? "active" : "inactive")">@(e.IsActive ? "Active" : "Inactive")</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+</body>
+</html>

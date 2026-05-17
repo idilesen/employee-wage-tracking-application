@@ -1,0 +1,64 @@
+@page
+@model CommunicationModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Communication Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .search-box { background: white; padding: 16px 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; gap: 12px; align-items: center; }
+        .search-box input { flex: 1; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+        .search-box label { font-weight: bold; color: #333; font-size: 13px; white-space: nowrap; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        th { background: #003366; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+        td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover td { background: #f5f8ff; }
+        a.mail { color: #003366; }
+        .total { background: white; padding: 12px 20px; border-radius: 8px; margin-top: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>📞 Communication Report</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    <div class="search-box">
+        <label>Search:</label>
+        <input type="text" id="searchInput" placeholder="Search by name, department..." onkeyup="filterTable()" />
+    </div>
+    <table id="commTable">
+        <thead>
+            <tr><th>ID</th><th>Full Name</th><th>Department</th><th>Phone</th><th>Cell</th><th>Email</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.Employees)
+            {
+                <tr>
+                    <td>@e.EmplID</td>
+                    <td>@e.FullName</td>
+                    <td>@e.Department</td>
+                    <td>@e.Phone</td>
+                    <td>@e.Cell</td>
+                    <td><a class="mail" href="mailto:@e.Email">@e.Email</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="total">Total: @Model.Employees.Count employee(s)</div>
+</div>
+<script>
+    function filterTable() {
+        var q = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('#commTable tbody tr').forEach(function(row) {
+            row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>

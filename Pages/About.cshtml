@@ -1,0 +1,67 @@
+@page
+@model AboutModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - About</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background-color: #f8f9fa; color: #002244; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+        .navbar { background-color: #003366; border-bottom: 4px solid #cc0000; display: flex; padding: 0 20px; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; display: flex; width: 100%; }
+        .navbar li a { display: block; color: white; padding: 12px 25px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .navbar li a:hover, .navbar li a.active { background-color: #cc0000; color: white; }
+        .logout-item { margin-left: auto; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .card { background: white; padding: 36px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #003366; border-bottom: 2px solid #cc0000; padding-bottom: 10px; margin-bottom: 20px; }
+        p { color: #444; line-height: 1.7; }
+        .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+        .member { background: #f0f4ff; padding: 16px; border-radius: 6px; text-align: center; border-top: 3px solid #003366; }
+        .member h4 { margin: 0 0 6px; color: #003366; }
+        .member p { margin: 0; font-size: 12px; color: #666; }
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        .info-table td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .info-table td:first-child { font-weight: bold; color: #003366; width: 40%; }
+    </style>
+</head>
+<body>
+<div class="header"><h1>Employee Wages Tracking Application (EWTA)</h1></div>
+<nav class="navbar">
+    <ul>
+        <li><a href="/Index">HOME</a></li>
+        <li><a href="/Index?category=Forms">FORMS</a></li>
+        <li><a href="/Index?category=Reports">REPORTS</a></li>
+        <li><a href="/About" class="active">ABOUT</a></li>
+        <li><a href="/Contact">CONTACT</a></li>
+        <li><a href="/Help">HELP</a></li>
+        <li class="logout-item"><a href="/Login">LOGOUT</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <div class="card">
+        <h2>About This Project</h2>
+        <p>The <strong>Employee Wages Tracking Application (EWTA)</strong> is a web-based ASP.NET project developed for the <em>1413002025 Advanced Web Programming</em> course at Atlas University, Faculty of Engineering and Nature Sciences, Software Engineering Program.</p>
+        <p>The application allows organizations to manage employee records, track wages, and generate reports through an intuitive web interface backed by a SQL Server database.</p>
+
+        <table class="info-table">
+            <tr><td>Course</td><td>1413002025 Advanced Web Programming</td></tr>
+            <tr><td>Instructor</td><td>Asst. Prof. Mustafa Coruh</td></tr>
+            <tr><td>University</td><td>Atlas University</td></tr>
+            <tr><td>Department</td><td>Software Engineering</td></tr>
+            <tr><td>Technology</td><td>ASP.NET Core 10, Razor Pages, SQL Server</td></tr>
+            <tr><td>Version</td><td>1.0</td></tr>
+        </table>
+
+        <h2 style="margin-top:30px">Our Team</h2>
+        <div class="team">
+            <div class="member"><h4>İdil Esen</h4><p>Developer</p></div>
+            <div class="member"><h4>Talya Kuvvet</h4><p>Developer</p></div>
+            <div class="member"><h4>Melis Can</h4><p>Developer</p></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

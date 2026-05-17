@@ -1,0 +1,158 @@
+@page
+@model EmployeeUpdateModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Employee Update</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        th { background: #003366; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+        td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover td { background: #f5f8ff; }
+        .btn-edit { background: #003366; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .btn-delete { background: #cc0000; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .edit-form { background: white; padding: 28px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #003366; margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; color: #333; font-size: 13px; }
+        input[type=text], input[type=date], input[type=email], input[type=number], select, textarea {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px;
+        }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .radio-group { display: flex; gap: 16px; margin-top: 4px; }
+        .btn-save { background: #003366; color: white; padding: 10px 28px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; }
+        .btn-cancel { background: #888; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; margin-left: 10px; }
+        .msg { margin-top: 14px; padding: 10px; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; }
+        .active { background: #d4edda; color: #155724; }
+        .inactive { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>🔄 Employee Data Update</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="msg @(Model.Success ? "success" : "error")">@Model.Message</div>
+    }
+
+    @if (Model.EditEmployee == null)
+    {
+        <h2>Select Employee to Update</h2>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Full Name</th><th>Department</th><th>Title</th><th>Email</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Employees)
+                {
+                    <tr>
+                        <td>@e.EmplID</td>
+                        <td>@e.FullName</td>
+                        <td>@e.Department</td>
+                        <td>@e.Title</td>
+                        <td>@e.Email</td>
+                        <td><span class="badge @(e.IsActive ? "active" : "inactive")">@(e.IsActive ? "Active" : "Inactive")</span></td>
+                        <td>
+                            <form method="get" style="display:inline">
+                                <input type="hidden" name="edit" value="@e.EmplID" />
+                                <button type="submit" class="btn-edit">Edit</button>
+                            </form>
+                            <form method="post" action="/EmployeeUpdate?handler=Delete&id=@e.EmplID" style="display:inline" onsubmit="return confirm('Delete this employee?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        var e = Model.EditEmployee;
+        <div class="edit-form">
+            <h2>Edit Employee: @e.FullName</h2>
+            <form method="post" asp-page-handler="Update">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="EmplID" value="@e.EmplID" />
+                <div class="row">
+                    <div class="form-group"><label>First Name *</label><input type="text" name="FName" value="@e.FName" required /></div>
+                    <div class="form-group"><label>Last Name *</label><input type="text" name="LName" value="@e.LName" required /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Birth Date</label><input type="date" name="BDate" value="@e.BDate" /></div>
+                    <div class="form-group"><label>Start Date</label><input type="date" name="StartDate" value="@e.StartDate" /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Left Date</label><input type="date" name="LeftDate" value="@e.LeftDate" /></div>
+                    <div class="form-group"><label>Left Reason</label><input type="text" name="LeftReason" value="@e.LeftReason" /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="GenderID" value="1" @(e.GenderID == 1 ? "checked" : "") /> Man</label>
+                            <label><input type="radio" name="GenderID" value="2" @(e.GenderID == 2 ? "checked" : "") /> Woman</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <select name="TitleID">
+                            @foreach (var t in Model.Titles)
+                            {
+                                <option value="@t.Key" @(t.Key == e.TitleID ? "selected" : "")>@t.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select name="DeptID">
+                            @foreach (var d in Model.Departments)
+                            {
+                                <option value="@d.Key" @(d.Key == e.DeptID ? "selected" : "")>@d.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Email</label><input type="email" name="Email" value="@e.Email" /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Phone</label><input type="text" name="Phone" value="@e.Phone" /></div>
+                    <div class="form-group"><label>Cell</label><input type="text" name="Cell" value="@e.Cell" /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>City</label><input type="text" name="City" value="@e.City" /></div>
+                    <div class="form-group"><label>Province</label><input type="text" name="Province" value="@e.Province" /></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Wage</label><input type="number" name="Wage" value="@e.Wage" step="0.01" /></div>
+                    <div class="form-group"><label>Commission Rate</label><input type="number" name="CommissionRate" value="@e.CommissionRate" step="0.01" /></div>
+                </div>
+                <div class="form-group"><label>Address</label><input type="text" name="Address" value="@e.Address" /></div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="IsActive" value="true" @(e.IsActive ? "checked" : "") /> Active Employee</label>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="IsManager" value="true" @(e.IsManager ? "checked" : "") /> Manager</label>
+                </div>
+                <button type="submit" class="btn-save">💾 Save Changes</button>
+                <a href="/EmployeeUpdate"><button type="button" class="btn-cancel">Cancel</button></a>
+            </form>
+        </div>
+    }
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+@page
+@model WagesByEmpModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Wages by Employee</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .emp-section { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; }
+        .emp-header { background: #003366; color: white; padding: 12px 20px; display: flex; justify-content: space-between; }
+        .emp-header h3 { margin: 0; font-size: 15px; }
+        .emp-header span { font-size: 13px; opacity: 0.85; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f0f4ff; color: #003366; padding: 9px 12px; text-align: left; font-size: 12px; border-bottom: 2px solid #003366; }
+        td { padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover td { background: #f5f8ff; }
+        .total-row td { font-weight: bold; background: #f0f4ff; color: #003366; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>💰 Wages by Employee Report</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    @foreach (var group in Model.WageGroups)
+    {
+        <div class="emp-section">
+            <div class="emp-header">
+                <h3>@group.Key</h3>
+                <span>Total: @group.Value.Sum(w => w.Total).ToString("N2")</span>
+            </div>
+            <table>
+                <thead><tr><th>Date</th><th>Month</th><th>Amount</th><th>Commission</th><th>Total</th><th>Year</th></tr></thead>
+                <tbody>
+                    @foreach (var w in group.Value)
+                    {
+                        <tr>
+                            <td>@w.WageDate</td>
+                            <td>@w.Month</td>
+                            <td>@w.Amount.ToString("N2")</td>
+                            <td>@w.Commission.ToString("N2")</td>
+                            <td>@w.Total.ToString("N2")</td>
+                            <td>@w.Year</td>
+                        </tr>
+                    }
+                    <tr class="total-row">
+                        <td colspan="4">TOTAL</td>
+                        <td>@group.Value.Sum(w => w.Total).ToString("N2")</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+</body>
+</html>

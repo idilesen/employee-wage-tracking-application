@@ -1,0 +1,85 @@
+@page
+@model WageEntryModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWTA - Wage Entry</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; }
+        .header { background: #003366; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header a { color: white; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; }
+        .container { max-width: 600px; margin: 30px auto; background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #003366; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; color: #333; }
+        input[type=text], input[type=date], input[type=number], select {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        button { background: #003366; color: white; padding: 12px 32px; border: none; border-radius: 4px; font-size: 15px; cursor: pointer; margin-top: 8px; }
+        button:hover { background: #0055aa; }
+        .msg { margin-top: 14px; padding: 10px; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .total-preview { background: #f0f2f5; padding: 12px; border-radius: 4px; margin-top: 8px; font-weight: bold; color: #003366; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>💰 Wage Data Entry</h1>
+    <a href="/">← Main Menu</a>
+</div>
+<div class="container">
+    <h2>New Wage Record</h2>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label>Employee *</label>
+            <select name="EmplID" required>
+                <option value="">-- Select Employee --</option>
+                @foreach (var e in Model.Employees)
+                { <option value="@e.Key">@e.Value</option> }
+            </select>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label>Wage Date *</label>
+                <input type="date" name="WageDate" required />
+            </div>
+            <div class="form-group">
+                <label>Month</label>
+                <select name="MonthID">
+                    @foreach (var m in Model.Months)
+                    { <option value="@m.Key">@m.Value</option> }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label>Wage Amount *</label>
+                <input type="number" name="WageAmount" value="0" step="0.01" min="0" required oninput="calcTotal()" />
+            </div>
+            <div class="form-group">
+                <label>Commission</label>
+                <input type="number" name="WageCommission" value="0" step="0.01" min="0" oninput="calcTotal()" />
+            </div>
+        </div>
+        <div class="total-preview" id="totalPreview">Total: 0.00</div>
+        <button type="submit">💾 Save Wage</button>
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="msg @(Model.Success ? "success" : "error")">@Model.Message</div>
+        }
+    </form>
+</div>
+<script>
+    function calcTotal() {
+        var amt = parseFloat(document.querySelector('[name=WageAmount]').value) || 0;
+        var com = parseFloat(document.querySelector('[name=WageCommission]').value) || 0;
+        document.getElementById('totalPreview').textContent = 'Total: ' + (amt + com).toFixed(2);
+    }
+</script>
+</body>
+</html>
